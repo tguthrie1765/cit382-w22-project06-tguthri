@@ -25,7 +25,6 @@ export default function App() {
         inputParent={inputParent}
         setInputParent={setInputParent}
       />
-      <>{inputParent}</>
       <br />
       {/*need to record time when clicked*/}
       <button
@@ -38,21 +37,28 @@ export default function App() {
       <button
         onClick={() => {
           setInputParent("");
+          setEndTime(null);
+          setStartTime(null);
         }}
       >
         RESET
       </button>
       <br />
-      <Stats value={value} inputParent={inputParent} />
+      <Stats
+        value={value}
+        inputParent={inputParent}
+        startTime={startTime}
+        endTime={endTime}
+      />
     </div>
   );
 }
 
-//display test text and hadeles change button
 function TextDisplay(props) {
   const { value, setValue, inputParent } = props;
+  //https://www.w3schools.com/js/js_random.asp
   function randNum() {
-    let num = Math.floor(Math.random() * 4);
+    let num = Math.floor(Math.random() * 10);
     if (num !== value) {
       return setValue(num);
     } else {
@@ -118,7 +124,7 @@ function TextInput(props) {
 // recieves text, input and start/end time
 //does stat math and displays
 function Stats(props) {
-  const { value, inputParent } = props;
+  const { value, inputParent, startTime, endTime } = props;
   let text = Text[value];
   function countErrors(s, t) {
     // Generate an array from text where new array contains true if
@@ -131,18 +137,28 @@ function Stats(props) {
   function countWordsPerSecond(compare, seconds) {
     if (seconds > 0) {
       const count = compare.split(/\s+/).length;
-      return count / seconds;
+      return (count / seconds).toFixed(2);
     } else {
       return 0;
     }
   }
 
+  function timeSeconds(b, e) {
+    return endTime && startTime != null ? ((e - b) / 1000).toFixed(2) : 0;
+  }
+
   return (
     <div>
-      <h3>Stats</h3>
-      <div>Elapsed Time: </div>
-      <div>Mistakes: {countErrors(text, inputParent)}</div>
-      <div>Words Per min:</div>
+      <h3>Results</h3>
+      <div>Elapsed Time (seconds): {timeSeconds(startTime, endTime)}</div>
+      <div>
+        Mistakes:{" "}
+        {endTime && startTime != null ? countErrors(text, inputParent) : 0}
+      </div>
+      <div>
+        Words Per min:{" "}
+        {countWordsPerSecond(inputParent, timeSeconds(startTime, endTime))}
+      </div>
     </div>
   );
 }

@@ -2,3 +2,13 @@
   font-family: sans-serif;
   text-align: center;
 }
+.match {
+  color: green;
+}
+.matchError {
+  color: white;
+  background: red;
+}
+.stats {
+  border-style: groove;
+}
