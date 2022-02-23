@@ -7,16 +7,39 @@ export default function App() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [value, setValue] = useState(0);
+  const [css, setCSS] = useState("dark");
+  const [count, setCount] = useState(0);
+
   console.log("end time=", endTime);
-  //needs to record time and pass to stats
+
+  useEffect(() => {
+    if (startTime != null && endTime == null) {
+      setTimeout(() => {
+        setCount((count) => count + 1);
+      }, 1000);
+    }
+  }, [count, startTime, endTime]);
+
   return (
     <div className="App">
-      <h1>Typing Speed Test</h1>
+      <div>
+        <h1>
+          Typing Speed Test
+          <button
+            className={css === "dark" ? "topButtonDark" : "topButtonLight"}
+            onClick={() => (css === "dark" ? setCSS("light") : setCSS("dark"))}
+          >
+            {css === "dark" ? "Dark" : "Light"}
+          </button>
+        </h1>
+      </div>
+      <hr />
       <h3>Start typing to take test, and press END to get results</h3>
       <TextDisplay
         value={value}
         setValue={setValue}
         inputParent={inputParent}
+        css={css}
       />
       <br />
       <TextInput
@@ -24,10 +47,12 @@ export default function App() {
         setStartTime={setStartTime}
         inputParent={inputParent}
         setInputParent={setInputParent}
+        css={css}
       />
       <br />
       {/*need to record time when clicked*/}
       <button
+        className={css === "dark" ? "button" : "buttonLight"}
         onClick={() => {
           setEndTime(new Date());
         }}
@@ -35,10 +60,12 @@ export default function App() {
         END
       </button>
       <button
+        className={css === "dark" ? "button" : "buttonLight"}
         onClick={() => {
           setInputParent("");
           setEndTime(null);
           setStartTime(null);
+          setCount(0);
         }}
       >
         RESET
@@ -49,13 +76,14 @@ export default function App() {
         inputParent={inputParent}
         startTime={startTime}
         endTime={endTime}
+        count={count}
       />
     </div>
   );
 }
 
 function TextDisplay(props) {
-  const { value, setValue, inputParent } = props;
+  const { value, setValue, inputParent, css } = props;
   //https://www.w3schools.com/js/js_random.asp
   function randNum() {
     let num = Math.floor(Math.random() * 10);
@@ -86,6 +114,7 @@ function TextDisplay(props) {
   return (
     <div>
       <button
+        className={css === "dark" ? "button" : "buttonLight"}
         onClick={() => {
           console.log("change text clicked");
           console.log("text value=", value);
@@ -101,8 +130,8 @@ function TextDisplay(props) {
 
 //displays input text, saves state and time
 function TextInput(props) {
-  const { inputParent, setInputParent } = props;
-  const { startTime, setStartTime } = props;
+  const { inputParent, setInputParent, startTime, setStartTime, css } = props;
+
   console.log("start time=", startTime);
   // needs to record time when start
   useEffect(() => {
@@ -113,6 +142,7 @@ function TextInput(props) {
   return (
     <div>
       <textarea
+        className={css === "dark" ? "textArea" : "textAreaLight"}
         placeholder="Start typing to begin"
         onChange={(e) => setInputParent(e.target.value)}
         value={inputParent}
@@ -124,7 +154,7 @@ function TextInput(props) {
 // recieves text, input and start/end time
 //does stat math and displays
 function Stats(props) {
-  const { value, inputParent, startTime, endTime } = props;
+  const { value, inputParent, startTime, endTime, count } = props;
   let text = Text[value];
   function countErrors(s, t) {
     // Generate an array from text where new array contains true if
@@ -150,14 +180,18 @@ function Stats(props) {
   return (
     <div>
       <h3>Results</h3>
-      <div>Elapsed Time (seconds): {timeSeconds(startTime, endTime)}</div>
       <div>
-        Mistakes:{" "}
-        {endTime && startTime != null ? countErrors(text, inputParent) : 0}
+        Elapsed Time (seconds):{" "}
+        {endTime == null ? count : timeSeconds(startTime, endTime)}
       </div>
       <div>
-        Words Per min:{" "}
-        {countWordsPerSecond(inputParent, timeSeconds(startTime, endTime))}
+        Mistakes:{" "}
+        {/*endTime && startTime != null ? countErrors(text, inputParent) : 0*/}
+        {countErrors(text, inputParent)}
+      </div>
+      <div>
+        {/*timeSeconds(startTime, endTime)*/}
+        Words Per min: {countWordsPerSecond(inputParent, count) * 60}
       </div>
     </div>
   );

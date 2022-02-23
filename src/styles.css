@@ -1,6 +1,11 @@
+body {
+  background: #202124;
+}
+
 .App {
-  font-family: sans-serif;
+  font-family: "Roboto", sans-serif;
   text-align: center;
+  color: #e8eaed;
 }
 .match {
   color: green;
@@ -11,4 +16,38 @@
 }
 .stats {
   border-style: groove;
+}
+
+.button {
+  font-family: "Roboto", sans-serif;
+  background-color: #8ab4f8;
+  border-radius: 6px;
+  border-style: none;
+}
+.buttonLight {
+  font-family: "Roboto", sans-serif;
+  border-radius: 6px;
+}
+.textArea {
+  background-color: #202124;
+  color: #e8eaed;
+}
+.textAreaLight {
+}
+textarea::placeholder {
+  font-family: "Roboto", sans-serif;
+  color: #e8eaed;
+}
+
+.topButtonDark {
+  float: right;
+  font-family: "Roboto", sans-serif;
+  background-color: #8ab4f8;
+  border-radius: 20px;
+  border-style: none;
+}
+.topButtonLight {
+  float: right;
+  font-family: "Roboto", sans-serif;
+  border-radius: 20px;
 }
