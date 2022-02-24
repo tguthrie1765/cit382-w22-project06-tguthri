@@ -1,11 +1,11 @@
-body {
+.dark {
   background: #202124;
+  color: #e8eaed;
 }
 
 .App {
   font-family: "Roboto", sans-serif;
   text-align: center;
-  color: #e8eaed;
 }
 .match {
   color: green;
@@ -28,15 +28,18 @@ body {
   font-family: "Roboto", sans-serif;
   border-radius: 6px;
 }
-.textArea {
+.textAreaDark {
   background-color: #202124;
   color: #e8eaed;
 }
-.textAreaLight {
-}
-textarea::placeholder {
+
+.textAreaDark::placeholder {
   font-family: "Roboto", sans-serif;
   color: #e8eaed;
+}
+.textAreaLight::placeholder {
+  font-family: "Roboto", sans-serif;
+  color: black;
 }
 
 .topButtonDark {

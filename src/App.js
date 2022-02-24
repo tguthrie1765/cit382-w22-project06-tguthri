@@ -7,8 +7,13 @@ export default function App() {
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
   const [value, setValue] = useState(0);
-  const [css, setCSS] = useState("dark");
+  const [css, setCSS] = useState("light");
   const [count, setCount] = useState(0);
+
+  function darkMode() {
+    let element = document.body;
+    element.classList.toggle("dark");
+  }
 
   console.log("end time=", endTime);
 
@@ -27,7 +32,10 @@ export default function App() {
           Typing Speed Test
           <button
             className={css === "dark" ? "topButtonDark" : "topButtonLight"}
-            onClick={() => (css === "dark" ? setCSS("light") : setCSS("dark"))}
+            onClick={() => {
+              darkMode();
+              css === "dark" ? setCSS("light") : setCSS("dark");
+            }}
           >
             {css === "dark" ? "Dark" : "Light"}
           </button>
@@ -142,7 +150,7 @@ function TextInput(props) {
   return (
     <div>
       <textarea
-        className={css === "dark" ? "textArea" : "textAreaLight"}
+        className={css === "dark" ? "textAreaDark" : "textAreaLight"}
         placeholder="Start typing to begin"
         onChange={(e) => setInputParent(e.target.value)}
         value={inputParent}
@@ -191,7 +199,8 @@ function Stats(props) {
       </div>
       <div>
         {/*timeSeconds(startTime, endTime)*/}
-        Words Per min: {countWordsPerSecond(inputParent, count) * 60}
+        Words Per min:{" "}
+        {(countWordsPerSecond(inputParent, count) * 60).toFixed(2)}
       </div>
     </div>
   );
